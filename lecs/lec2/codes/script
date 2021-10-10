@@ -1,0 +1,5 @@
+# !/bin/bash
+
+g++ -std=c++17 -O2 -o $1 -Wall -Wextra $1.cpp
+./$1 
+
