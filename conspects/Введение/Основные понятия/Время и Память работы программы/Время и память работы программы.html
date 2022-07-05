@@ -1,0 +1,87 @@
+<h2 id="o-">O-нотация</h2>
+<h3 id="-">Зачем это нужно?</h3>
+<p>Казалось бы, что для оценки времени работы можно просто физически измерять время, которое программа работает на разных входных данных. Здесь есть достаточное количество минусов:</p>
+<ul>
+<li>время выполнения программы на разном железе может быть разным, а тестируется все на одном;</li>
+<li>чтобы измерить время, придется запустить сам алгоритм, но иногда приходится оценивать алгоритмы, требующие часы или даже дни работы;</li>
+<li>время будет учитывать какие-то вспомогательные операции, которые на самом деле в текущей оценке не нужны;</li>
+<li>Зачастую основной задачей программиста становится оптимизировать алгоритм, выполнение которого займёт тысячи лет, до какого-нибудь адекватного времени работы. Поэтому хотелось бы уметь предсказывать, сколько времени займёт выполнение алгоритма ещё до того, как мы его запустим.</li>
+</ul>
+<h3 id="-">Как же посчитать?</h3>
+<p>Будем считать за одну операцию следующие (компьютер успевает выполнить $10^8$ таких операций за секунду, но иногда можно добиться и выполнения $10^9$ операций за секунду на быстрых процессорах, хотя на это не стоит рассчитывать):</p>
+<ul>
+<li>арифметические операции ($*$, $+$, $-$, $/$, битовые сдвиги);</li>
+<li>сравнение чисел;</li>
+<li>присваивание;</li>
+</ul>
+<p>Мы можем попробовать точно оценить количество таких операций, которые выполняются в программе. Но в большинстве случаев такого подробного разбора всех действий не требуется. Если вы посчитаете, сколько операций сравнения происходит в разных квадратичных сортировках, то получите разные выражения, где главный член - это $N^2$, умноженное на некоторую константу плюс еще некоторая константа. </p>
+<p>Хочется придумать способ упростить эти формулы так, чтобы:</p>
+<p>1) не нужно было учитывать много информации, не очень сильно влияющей на итоговое время;
+2) легко было оценивать время работы разных алгоритмов для больших чисел;
+3) легко было сравнивать алгоритмы на предмет того, какой из них лучше подходит для тех или иных входных данных.</p>
+<h3 id="o-">O-нотация</h3>
+<p>Для этого придумали <strong>$O$-нотацию</strong> - асимптотическое время работы вместо точного (часто его ещё называют асимптотикой).</p>
+<p>Пусть $f(N)$ - это какая-то функция. Говорят, что алгоритм работает за $O(f(N))$, если существует число $C$, такое что алгоритм работает не более чем за $C \cdot f(N)$ операций. </p>
+<p>В таких обозначениях можно сказать, что</p>
+<ul>
+<li>Сортировка пузырьком работает за $O(N^2)$</li>
+<li>Сортировка подсчетом работает за $O(N + M)$</li>
+<li>Быстрая сортировка работает за $O(N \cdot logN)$</li>
+</ul>
+<p>Это обозначение удобно тем, что оно короткое и понятное, а также оно не зависит от умножения на константу или прибавления константы. Если алгоритм работает за $O(N^2)$, то это может значить, что он работает за $N^2$, за $N^2 + 3$, за $\frac{N(N-1)}{2}$ или даже за $1000 \cdot N^2 + 1$ действие. </p>
+<p>Главное, что функция ведет себя как $N^2$, то есть при увеличении $N$ (в данном случае это длина массива) он увеличивается как некоторая квадратичная функция. Например, если увеличить $N$ в $10$ раз, время работы программы увеличится приблизительно в $100$ раз.</p>
+<p>Поэтому все эти рассуждения про то, сколько операций в <code>swap</code> или считать ли отдельно присваивания, сравнения и циклы - отпадают. Как бы вы ни ответили на эти вопросы, они меняют ответ на константу, а значит асимптотическое время работы алгоритма никак не меняется.</p>
+<h2 id="-">Примеры</h2>
+<pre><code class="lang-cpp"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">is_prime</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span> </span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i*i &lt;= x; i++) {
+        <span class="hljs-keyword">if</span> (x % i == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+    <span class="hljs-keyword">return</span> x &gt; <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-comment">/*
+    * O(sqrt(x))
+    * так как максимальное значение i = sqrt(x) и внутри цикла выполняется только одна операция
+*/</span>
+</code></pre>
+<pre><code class="lang-cpp">long long cnt = <span class="hljs-number">0</span>;
+for (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">n</span>; i++) {
+    // Выполнится <span class="hljs-built_in">n</span> раз
+    for (<span class="hljs-built_in">int</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-built_in">n</span>; j++) {
+        // Выполнится <span class="hljs-built_in">n</span> раз
+        for (<span class="hljs-built_in">int</span> k = <span class="hljs-number">0</span>; k &lt; <span class="hljs-built_in">n</span>; k++) {
+            // Выполнится <span class="hljs-built_in">n</span> раз
+            cnt++;
+        }
+    }
+}
+
+/*
+    * <span class="hljs-built_in">n</span> = <span class="hljs-number">10</span>      ~ <span class="hljs-number">1000</span>
+    * <span class="hljs-built_in">n</span> = <span class="hljs-number">100</span>     ~ <span class="hljs-number">10</span>^<span class="hljs-number">6</span> (<span class="hljs-number">1</span>e6)
+    * <span class="hljs-built_in">n</span> = <span class="hljs-number">1000</span>    ~ <span class="hljs-number">10</span>^<span class="hljs-number">9</span> (<span class="hljs-number">1</span>e9)
+    * <span class="hljs-built_in">n</span> = <span class="hljs-number">2000</span>    ~ <span class="hljs-number">8</span>*<span class="hljs-number">10</span>^<span class="hljs-number">9</span> (<span class="hljs-number">8</span>e9)
+    * Очевидно, что асимптотика составляет O(<span class="hljs-built_in">n</span>^<span class="hljs-number">3</span>), так как количество операций = <span class="hljs-built_in">n</span> * <span class="hljs-built_in">n</span> * <span class="hljs-built_in">n</span>
+
+*/
+</code></pre>
+<pre><code class="lang-cpp">long long cnt = <span class="hljs-number">0</span>;
+for (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">n</span>; i++) {
+    // Выполнится <span class="hljs-built_in">n</span> раз
+    for (<span class="hljs-built_in">int</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-built_in">n</span>; j++) {
+        // Выполнится <span class="hljs-built_in">n</span> раз
+        for (<span class="hljs-built_in">int</span> k = j; k &lt; <span class="hljs-built_in">n</span>; k++) {
+            // Выполнится <span class="hljs-built_in">n</span>-j раз
+            cnt++;
+        }
+    }
+}
+
+/*
+    * <span class="hljs-built_in">n</span> = <span class="hljs-number">10</span>      ~ <span class="hljs-number">550</span>
+    * <span class="hljs-built_in">n</span> = <span class="hljs-number">100</span>     ~ <span class="hljs-number">5</span>e5
+    * <span class="hljs-built_in">n</span> = <span class="hljs-number">1000</span>    ~ <span class="hljs-number">5</span>e8
+    * <span class="hljs-built_in">n</span> = <span class="hljs-number">2000</span>    ~ <span class="hljs-number">4</span>e9
+    * Таким образом, асимптотика составляет O(<span class="hljs-built_in">n</span>^<span class="hljs-number">3</span>), домашним заданием будет доказать это формулами (посчитать количество операций).
+/*
+</code></pre>
