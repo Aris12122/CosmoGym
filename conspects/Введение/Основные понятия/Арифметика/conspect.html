@@ -1,0 +1,156 @@
+<h1 id="-">Арифметика</h1>
+<h2 id="-">Целочисленные типы данных</h2>
+<p>При решении задач почти всегда приходится хранить и обрабатывать данные. Для хранения целых чисел в C++ используются типы int, long long, short и другие. Чаще всего вы будете пользоваться типами int и long long. Они отличаются диапазоном значений. </p>
+<p>Тип int может хранить числа примерно от $-2 \cdot 10^9$ (минус двух миллиардов) до $2 \cdot 10^9$.</p>
+<p>В то время как long long имеет диапазон примерно от $-9 \cdot 10^{18}$ до $9 \cdot 10^{18}$</p>
+<p>Также в плюсах есть так называемые беззнаковые типы данных. Они отличаются тем, что не принимают отрицательных значений, соответственно максимальное положительное значение, которого они могут достигать выше.</p>
+<p>Например, unsigned int имеет диапазон от $0$ до примерно $4 \cdot 10^9$.</p>
+<p>В языке python реализована так называемая длинная арифметика, так что как четкого диапазона значений у целых чисел там нет и в большинстве случаев можно не думать об этом.</p>
+<p>Помимо хранения, также необходимо уметь и выполнять различные операции с целыми числами.</p>
+<p><a href="https://docs-python.ru/tutorial/osnovnye-vstroennye-tipy-python/tip-dannyh-int-tselye-chisla/">Подробнее в python</a></p>
+<p><a href="https://ravesli.com/urok-31-tselochislennyj-tip-dannyh-integer/">Подробнее в C++</a></p>
+
+
+
+
+<h2 id="-">Операции с целыми числами</h2>
+<p>Вы уже знаете, что есть такие операции, как сложение, вычитание, умножение и деление (целочисленное: &quot;/ в C++&quot; и &quot;// в python&quot;). Также есть операция взятие остатка по какому-то модулю.</p>
+<h3 id="-">Целочисленное деление</h3>
+<p>В математике обозначается как $\lfloor \frac{a}{b} \rfloor$ &mdash; деление с округлением вниз.</p>
+<p>$\lfloor \frac{a}{b} \rfloor = k$, где $k$ &mdash; наибольшее число такое, что $b \cdot k \le a$.</p>
+<p>Для положительных чисел можно понимать это так: мы делим число $a$ на $b$ и отбрасываем дробную часть.</p>
+<p>Например: $\frac{27}{7} = 3.86..$ , тогда $\lfloor \frac{27}{7} \rfloor = 3$.</p>
+<h3 id="-">Остаток от деления</h3>
+<p>По определению, если есть числа $a$ и $b$, а $\lfloor \frac{a}{b} \rfloor = k$, то $m = a - b \cdot k$ &mdash; остаток от деления числа $a$ на $b$.</p>
+<p>Заметьте, что из определения целочисленного деления $0 \le m &lt; b$. Попробуйте понять, почему так происходит.</p>
+<p>И пишут $a$ mod $b = m$. В C++ и python за это отвечает операция &quot;%&quot;.</p>
+<p>Например, запись: $27$ mod $7 = 1$ читается, как: остаток от деления $27$-ти на $7$ равен $6$.</p>
+<p>Так как $\lfloor \frac{27}{7} \rfloor = 3$ и $27 - 7 \cdot 3 = 6$.</p>
+<p>Попробуйте запустить эти строчки у себя на компьютере на python и C++ соответственно:</p>
+<pre><code class="lang-python"><span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-number">27</span> % <span class="hljs-number">7</span>)</span></span>
+</code></pre>
+<pre><code class="lang-c">cout &lt;&lt; <span class="hljs-number">27</span> % <span class="hljs-number">7</span>;
+</code></pre>
+<p><a href="https://ru.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/what-is-modular-arithmetic">Подробнее</a></p>
+
+
+
+
+
+<h2 id="-">Вещественные типы данных</h2>
+<p>Иногда приходится сталкиваться с вещественными числами. Про них мы поговорим позже, а пока вам достаточно знать, что:</p>
+<ul>
+<li>в python операция &quot;/&quot; отвечает за вещественное деление и как его результат вы получите вещественное число.</li>
+<li>в C++ если оба числа являются целыми, то операция &quot;/&quot; вернет целое число. Но если хотя бы одно из чисел является вещественным, тогда результатом станет вещественное число.</li>
+<li>В C++ вещественные типы данных: float, double, long double. Старайтесь использовать double или long double. </li>
+</ul>
+<pre><code class="lang-python"><span class="hljs-built_in">print</span>(27 / 7) <span class="hljs-comment"># вывод: 3.857142857142857</span>
+</code></pre>
+<pre><code class="lang-c"><span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-number">27</span> / <span class="hljs-number">7</span> &lt;&lt; <span class="hljs-string">'\n'</span>;         <span class="hljs-comment">// вывод: 3</span>
+<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-number">27.</span> / <span class="hljs-number">7</span> &lt;&lt; <span class="hljs-string">'\n'</span>;        <span class="hljs-comment">// вывод: 3.85714</span>
+<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-number">27</span> / <span class="hljs-number">7.</span> &lt;&lt; <span class="hljs-string">'\n'</span>;        <span class="hljs-comment">// вывод: 3.85714</span>
+<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-number">27.</span> / <span class="hljs-number">7.</span> &lt;&lt; <span class="hljs-string">'\n'</span>;       <span class="hljs-comment">// вывод: 3.85714</span>
+<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-keyword">double</span>(<span class="hljs-number">27</span>) / <span class="hljs-number">7</span> &lt;&lt; <span class="hljs-string">'\n'</span>; <span class="hljs-comment">// вывод: 3.85714</span>
+<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-keyword">double</span>(<span class="hljs-number">27</span> / <span class="hljs-number">7</span>) &lt;&lt; <span class="hljs-string">'\n'</span>; <span class="hljs-comment">// вывод: 3. (но результат --- вещественное число)</span>
+</code></pre>
+
+
+
+
+<h2 id="-">Простые числа</h2>
+<p>Целое число $a$ называется множителем, или делителем целого числа $b$,
+если $a$ делит $b$ ($b$ делится на $a$). Другими словами, число $a$ является множителем $b$, если остаток от деления числа $b$ на $a$ равен $0$. Например, множителями числа $24$ являются: $1, 2, 3, 4, 6, 8, 12$ и $24$.</p>
+<pre><code class="lang-c"><span class="hljs-comment">// В коде можно проверить, что число $a$ делит $b$ можно так:</span>
+
+<span class="hljs-keyword">if</span> <span class="hljs-comment">(b % a == 0)</span> {
+    <span class="hljs-comment">// a является множителем b</span>
+} else {
+    <span class="hljs-comment">// a не является множителем b</span>
+}
+</code></pre>
+<p>Целое число $x &gt; 1$ называется простым, если оно имеет ровно $2$ положительных множителя: $1$ и $x$. Число $1$ простым не является.</p>
+<p>Первые простые числа: 2, 3, 5, 7, 11, 13, 17, 19, 23 ...</p>
+<p>Проверим, является ли число $x$ простым. Для этого проверим, что все числа от $2$ до $x-1$ не являются множителями числа $x$.</p>
+<pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">is_prime</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span> </span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt; x; i++) {
+        <span class="hljs-keyword">if</span> (x % i == <span class="hljs-number">0</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        }
+    }
+    <span class="hljs-keyword">return</span> x &gt; <span class="hljs-number">1</span>; <span class="hljs-comment">// так как простым может быть только число &gt; 1</span>
+}
+</code></pre>
+<p>Для каждого целого числа $n &gt; 1$ существует единственное разложение на простые множители:</p>
+<p>$n = p_1^{a_1} \cdot p_2^{a_2} \cdot ...$ $ \cdot$ $p_k^{a_k} $,</p>
+<p>где $p_1, p_2, ..., p_k$ &mdash; различные простые числа, а $a_1, a_2, ..., a_k$ &mdash; положительные целые числа.</p>
+<h3 id="-">Решето Эратосфена</h3>
+<p>&mdash; это алгоритм нахождения всех простых чисел от $1$ до $n$. </p>
+<p>Основная идея:</p>
+<p>Запишем все числа от $1$ до $n$ в один ряд и будем вычеркивать составные числа:</p>
+<ul>
+<li>Сначала те, которые делятся на $2$, кроме $2$;</li>
+<li>Затем те, которые делятся на $3$, кроме $3$;</li>
+<li>Так как $4$ мы уже вычеркнули, то и все числа, делящиеся на $4$ мы тоже вычеркнули;</li>
+<li>И так далее $\dots$</li>
+</ul>
+<p>Реализация:</p>
+<pre><code class="lang-python">Кристина напиши плез на питоне((
+</code></pre>
+<pre><code class="lang-cpp"><span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">bool</span>&gt; is_prime(n + <span class="hljs-number">1</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// изначально все числа простые</span>
+is_prime[<span class="hljs-number">0</span>] = is_prime[<span class="hljs-number">1</span>] = <span class="hljs-literal">false</span>;
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) {
+    <span class="hljs-keyword">if</span> (!is_prime[i]) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// Если число не является простым, то мы его уже вычеркнули</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = i + i; j &lt;= n; j += i) {
+        is_prime[j] = <span class="hljs-literal">false</span>;
+    }
+}
+</code></pre>
+<p><a href="https://ru.algorithmica.org/cs/factorization/eratosthenes/">Подробнее</a></p>
+
+
+
+
+
+<h2 id="-">НОД и НОК</h2>
+<p><strong>Наибольшим общим делителем</strong> (далее $НОД$) двух целых чисел $a$ и $b$ называется такое наибольшее целое число $d$, на которое $a$ и $b$ делятся без остатка. Этот факт обозначается так: $d = НОД(a, b)$. Если оба числа равны нулю, то положим $НОД(0, 0) = 0$.</p>
+<p><strong>Наименьшим общим кратным</strong> (далее $НОК$) двух целых чисел $a$ и $b$ называется наименьшее положительное целое число, кратное как $a$, так и $b$.</p>
+<p>Несколько примеров: </p>
+<p>Найдем $НОД$ и $НОК$ чисел $12$ и $9$.</p>
+<p>Делители числа $12$: $1, 2, 3, 4, 6, 12$.</p>
+<p>Делители числа $9$: $1, 3, 9$.</p>
+<p>Таким образом, наибольший общий делитель у них: $НОД(12, 9) = 3$.</p>
+<p>Для нахождения $НОК$ воспользуемся программой по определению:</p>
+<pre><code class="lang-c"><span class="hljs-keyword">int</span> a = <span class="hljs-number">12</span>, b = <span class="hljs-number">9</span>;
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">12</span>; ; i++) {
+    <span class="hljs-keyword">if</span> (a % i != <span class="hljs-number">0</span>) <span class="hljs-keyword">continue</span>;
+    <span class="hljs-keyword">if</span> (b % i == <span class="hljs-number">0</span>) {
+        <span class="hljs-comment">// значит и a и b делятся на i и это минимальное возможное число</span>
+
+        <span class="hljs-built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="hljs-built_in">endl</span>; <span class="hljs-comment">// НОК(12, 9) = 36</span>
+        <span class="hljs-keyword">break</span>;
+    }
+}
+</code></pre>
+<p>Для вычисления $НОК$ есть формула:</p>
+<p>$НОК(a, b) = \frac{a \cdot b}{НОД(a, b)}$</p>
+<p>Можем проверить на нашем примере:</p>
+<p>$36 = \frac{9 \cdot 12}{3}$</p>
+<p><a href="https://www.eolymp.com/ru/blogs/posts/16#:~:text=%D0%9D%D0%B0%D0%B8%D0%B1%D0%BE%D0%BB%D1%8C%D1%88%D0%B8%D0%BC%20%D0%BE%D0%B1%D1%89%D0%B8%D0%BC%20%D0%B4%D0%B5%D0%BB%D0%B8%D1%82%D0%B5%D0%BB%D0%B5%D0%BC%20(%D0%B4%D0%B0%D0%BB%D0%B5%D0%B5%20%D0%9D%D0%9E%D0%94,0%2C%200">Подробнее</a>%20%3D%200)</p>
+<h2 id="-">Алгоритм Евклида</h2>
+<p>&mdash; это эффективный способ вычисления $НОД(a, b)$. Он основан на формуле:</p>
+<p>$НОД(a, b) = $</p>
+<ul>
+<li>$a$,              если $b = 0$.</li>
+<li>$НОД(b, a \% b)$, если $b \neq 0$ </li>
+</ul>
+<p>Реализация:</p>
+<pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">gcd</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b)</span> </span>{
+    <span class="hljs-keyword">if</span> (b == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> a;
+    <span class="hljs-function"><span class="hljs-keyword">return</span> <span class="hljs-title">gcd</span><span class="hljs-params">(b, a % b)</span></span>;
+}
+</code></pre>
+<p><a href="https://e-maxx.ru/algo/euclid_algorithm">Подробнее</a></p>
+
+
+
