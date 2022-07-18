@@ -1,11 +1,24 @@
+from collections import UserString
+from os import link
 import telebot
+import users_data
 
 bot = telebot.TeleBot("5389276277:AAHdRYTpXvqTGin9P1f-9FE0zAQ2pYWoZlY")
-# CF_handle = ""
 
-# @bot.message_handler(commands=["start"])
-# def start(message):
-#     bot.send_message(message.chat.id, "Привет! Отправь мне свой хендл с Codeforces, чтобы я мог тебя опознать")
+links = {   'stepik_course':    "",
+            'codeforces_group': "",
+            'register':         "https://forms.gle/89DsZeegTJ46XpXPA"}
+
+
+
+
+@bot.message_handler(commands=["start"])
+def start(message):
+    if is_user_registered(message.from_user.username):
+        bot.send_message(message.chat.id, "Приветствую тебя на нашем курсе! Всю необходимую информацию ты можешь посмотреть здесь:\n" + links["stepik_course"])
+    else:
+        bot.send_message(message.chat.id, "Привет! Вижу ты ещё не зарегистрировался на курс. Для продолжения, пожалуйста, заполни форму по ссылке:\n" + links["register"])
+
 
 # @bot.message_handler(commands=["token"])
 # def get_token(message):
@@ -34,6 +47,9 @@ def handle_text(message):
     # bot.send_message(message.chat.id, "Некорректное состояние! Пожалуйста, напишите @Aris12122 в телеграмм со скриншотом своих последних сообщений боту")
 
 
+def is_user_registered(user_handle):
+    tg_handles = users_data.get_tg_handles()
+    return tg_handles.count(user_handle) == 1
 
 
 bot.polling(non_stop=True)
