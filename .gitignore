@@ -1,12 +1,16 @@
 # comment
-20122013-tryenirovka-spbgu-s-3-yazyk-c-ru.pdf
-# TODO.*
+# old
 /videos
 
 /lecs/*
 sol
 
+
+# tg_bot-ignore
 */db
 tg_bot/client_secret.json
 tg_bot/sheets.googleapis.com-python.json
 tg_bot/__pycache__/users_data.cpython-38.pyc
+
+# contest-ignore
+s.cpp
