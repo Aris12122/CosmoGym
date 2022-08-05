@@ -14,3 +14,8 @@ tg_bot/__pycache__/users_data.cpython-38.pyc
 
 # contest-ignore
 s.cpp
+testlib.h
+naive.cpp
+tester_gen.cpp
+test.txt
+

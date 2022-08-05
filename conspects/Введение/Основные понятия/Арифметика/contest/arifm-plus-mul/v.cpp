@@ -9,9 +9,9 @@ using namespace std;
 int main(int argc, char* argv[]) {
     registerValidation(argc, argv);
 
-    inf.readInt(-10'000, 10'000, "x");
+    inf.readInt(-100'000, 100'000, "x");
     inf.readSpace();
-    inf.readInt(-10'000, 10'000, "y");
+    inf.readInt(1, 100'000, "y");
 
     inf.readEoln();
     inf.readEof();

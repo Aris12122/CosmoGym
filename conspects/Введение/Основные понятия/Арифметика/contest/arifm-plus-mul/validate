@@ -1,0 +1,6 @@
+#!/bin/bash
+
+g++ -O2 -std=c++17 -Wall -Wextra -Wconversion v.cpp
+./a.out < in$1.txt
+echo "Sucessful validation"
+rm a.out

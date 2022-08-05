@@ -10,7 +10,6 @@ using namespace std;
 int main(int argc, char* argv[]) {
     registerGen(argc, argv, 1);
 
-    int x = opt<int>(1);
-    int y = opt<int>(2);
-    cout << x << ' ' << y << '\n';
+    int t = opt<int>(1);
+    cout << t << '\n';
 }
