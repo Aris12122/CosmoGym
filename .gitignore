@@ -19,3 +19,7 @@ naive.cpp
 tester_gen.cpp
 test.txt
 
+tg_bot/token.py
+tg_bot/secret
+tg_bot/geckodriver.log
+tg_bot/__pycache__
