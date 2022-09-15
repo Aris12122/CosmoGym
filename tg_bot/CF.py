@@ -1,6 +1,3 @@
-
-from typing import final
-from warnings import catch_warnings
 import pandas as pd
 import time
 from selenium.webdriver.support.ui import Select
@@ -10,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-url = 'https://codeforces.com/group/Af4KX7UJ7v/contest/256152/status'
+url = 'https://codeforces.com/group/Hs4XCEVg60/members'
 
 links = {
     "group_members": "https://codeforces.com/group/Af4KX7UJ7v/members"
@@ -19,7 +16,8 @@ links = {
 
 
 contests = {
-    1: "https://codeforces.com/group/Af4KX7UJ7v/contest/227887/status",
+    0: "https://codeforces.com/group/Hs4XCEVg60/contest/394997/status",
+    1: "https://codeforces.com/group/Hs4XCEVg60/contest/103884/status",
     2: "https://codeforces.com/group/Af4KX7UJ7v/contest/227887/status",
 
 }
@@ -37,9 +35,9 @@ def is_in_group(handle):
         members = tables[1]["Member"]
         driver.close()
         return members.str.contains(handle).any()
-    except:
+    except Exception as e:
         driver.close()
-        print('An exception occurred')
+        print('An exception occurred' + str(e))
         
 
 def select_value(driver, id, value):
@@ -68,11 +66,11 @@ def is_solved(contest_id, problem_id, handle):
 
         tables = pd.read_html(driver.page_source)
         name = tables[2].loc[0, "Who"]
-        time.sleep(3)
         print(name)
 
-    except:
-        print('An exception occurred')
+    except Exception as e:
+        print("An exception occurred while checking CF.is_solved " + handle)
+        print(str(e))
     driver.close()
 
     return handle == name
