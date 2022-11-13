@@ -11,15 +11,17 @@ url = 'https://codeforces.com/group/Hs4XCEVg60/members'
 
 links = {
     "group_members": "https://codeforces.com/group/Af4KX7UJ7v/members"
-
 }
 
 
 contests = {
     0: "https://codeforces.com/group/Hs4XCEVg60/contest/394997/status",
-    1: "https://codeforces.com/group/Hs4XCEVg60/contest/103884/status",
-    2: "https://codeforces.com/group/Af4KX7UJ7v/contest/227887/status",
-
+    1: "https://codeforces.com/group/Hs4XCEVg60/contest/395950/status",
+    2: "https://codeforces.com/group/Hs4XCEVg60/contest/395952/status",
+    3: "https://codeforces.com/group/Hs4XCEVg60/contest/394972/status",
+    4: "https://codeforces.com/group/Hs4XCEVg60/contest/401822/status",
+    5: "https://codeforces.com/group/Hs4XCEVg60/contest/395824/status",
+    6: "https://codeforces.com/group/Hs4XCEVg60/contest/395623/status",
 }
 
 options = Options()
@@ -53,6 +55,7 @@ def add_participant(driver, handle):
 def is_solved(contest_id, problem_id, handle):
 
     driver = webdriver.Firefox(options=options)
+    name = ""
     
     try:
         driver.get(contests[contest_id])
@@ -65,8 +68,8 @@ def is_solved(contest_id, problem_id, handle):
         driver.find_element(By.CSS_SELECTOR, ".status-filter > div:nth-child(4) > input:nth-child(1)").click()
 
         tables = pd.read_html(driver.page_source)
-        name = tables[2].loc[0, "Who"]
-        print(name)
+        name = tables[2].loc[0, "Who"].split('\n')[0]
+        # print("Name: " + name)
 
     except Exception as e:
         print("An exception occurred while checking CF.is_solved " + handle)

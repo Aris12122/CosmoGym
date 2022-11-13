@@ -1,5 +1,6 @@
-from lib2to3.pgen2 import token
+from re import M
 import telebot
+from traitlets import default
 from users_data import Users_data
 import CF
 import ans_token
@@ -21,10 +22,17 @@ links = {
 contest_last_letter = {
     0: "G",
     1: "J",
-    2: "H",
+    2: "I",
+    3: "P",
+    4: "I",
+    5: "L",
+    6: "J",
 }
 
-current_contest = 1
+first_contest = 0
+last_contest = 6
+current_module = 1
+
 
 def get_file(path):
     with open(path) as f:
@@ -50,12 +58,13 @@ def check_registered(message, tg_handle = "", cf_handle = ""):
         if (tg_handle == "") :
             tg_handle = message.from_user.username
 
-        print("Checking... " + tg_handle)
+        print("Checking... " + str(tg_handle))
 
         if cached_users.__contains__(tg_handle):
             return True
-    
+
         if udata.is_user_registered(tg_handle) == False:
+            print("Not registered " + str(tg_handle))
             bot.send_message(message.chat.id, "Убедитесь, пожалуйста, что вы правильно заполнили форму: " + links["register"])
             return False
         
@@ -69,9 +78,10 @@ def check_registered(message, tg_handle = "", cf_handle = ""):
     
     except Exception as e:
         bot.send_message(message.chat.id, error_message)
-        print("Fail " + str(e))
+        print("Fail check_registered " + str(e))
         return False
 
+    print("Successfully checked " + str(tg_handle) + " " + str(cf_handle))
     add_to_file("data/registered_users", " " + tg_handle)
     cached_users.add(tg_handle)
     cached_cf_handles.add(cf_handle)
@@ -85,14 +95,29 @@ def check_registered(message, tg_handle = "", cf_handle = ""):
 @bot.message_handler(commands=["start"])
 def start(message):
     bot.send_message(message.chat.id, "Проверка...")
+    if (str(message.from_user.username) == "None"):
+        print("Опять этот None")
+        try:
+            print(str(message))
+        except:
+            print("Не получилось")
+        bot.send_message(message.chat.id, "Пожалуйста, пищите со своего аккаунта. Повторите попытку с помощью команды /start")
+        return
     if check_registered(message=message):
         bot.send_message(message.chat.id, "Приветствую вас на нашем курсе! Вы успешно зарегистрировались!")
     else:
         bot.send_message(message.chat.id, "Регистрация не завершена. Повторите попытку с помощью команды /start")
 
 
-def get_solved(tg_handle, cf_handle, contest_id):
+def get_solved_full(tg_handle, cf_handle):
     print("reply to " + cf_handle + " ")
+    solved = 0
+    for contest_id in range(first_contest, last_contest + 1):
+        solved += get_solved(tg_handle, cf_handle, contest_id)
+    return solved
+
+def get_solved(tg_handle, cf_handle, contest_id):
+    print("For contest: " + str(contest_id))
 
     # if len(problem_id) != 1:
     #     bot.send_message(message.chat.id, token_format_message + "Название задачи должен быть одной буквой\n")
@@ -110,7 +135,7 @@ def get_solved(tg_handle, cf_handle, contest_id):
 
     for i in range(ord("A"), ord(contest_last_letter[contest_id])):
         problem_id = chr(i)
-        print(problem_id)
+        # print(problem_id)
         try:
             if CF.is_solved(contest_id=contest_id, problem_id=problem_id, handle=cf_handle):
                 cnt += 1
@@ -118,7 +143,7 @@ def get_solved(tg_handle, cf_handle, contest_id):
             print("Error occurred with checking CF_is_solved with problem:" + problem_id)
             print("Error occurred to " + cf_handle)
             print(str(e))
-
+    print(cnt)
     return cnt
 
     # if contest_id > len(contests):
@@ -155,10 +180,7 @@ def get_solved(tg_handle, cf_handle, contest_id):
 
 #     reply_token(message=message, contest_id=contest_id, problem_id=problem_id)
 
-    
-@bot.message_handler(content_types=["text"])
-def handle_text(message):
-    bot.send_message(message.chat.id, "К сожалению, я понимаю только команду /start")
+
 #     ans_token.get_ans_token(1, 2, "Aris")
 #     ans_token.get_ans_token(2, 2, "Aris")
 #     ans_token.get_ans_token(1, 3, "Aris")
@@ -197,28 +219,45 @@ def handle_text(message):
 def get_token(message):
 
     if (message.from_user.username == "Aris12122") :
+        all_solved = 0
+        for contest_id in range(first_contest, last_contest + 1):
+            all_solved += ord(contest_last_letter[contest_id]) - ord('A')
+        print("Всего решено: " + str(all_solved))
+        solved = 0
         with open("data/contestants") as f:
             contestants = f.readlines()
-        for i in range (0, len(contestants)):
+        for i in range (21, len(contestants)):
             contestant = contestants[i].split(' ')
             message_id = contestant[0]
             tg_handle = contestant[1]
             cf_handle = contestant[2]
+            if cf_handle[-1] == '\n':
+                cf_handle = cf_handle[:len(cf_handle) - 1]
+            print(cf_handle)
+            solved = 0
             try:
-                solved = get_solved(tg_handle=tg_handle, cf_handle=cf_handle, contest_id=current_contest)
+                solved += get_solved_full(tg_handle=tg_handle, cf_handle=cf_handle)
             except Exception as e:
                 print("Error occurred while processing " + cf_handle)
                 print(str(e))
-                return
-            print(cf_handle + " Solved ", solved, " of tasks")
-            token = ans_token.get_ans_token(current_contest, solved, cf_handle)
-            print("Token: " + token)
-            bot.send_message(message_id, "Ваш токен за контест #" + str(current_contest) + ", в котором вы решили " + str(solved) + " задач:")
-            bot.send_message(message_id, token)
-            bot.send_message(message_id, "Инструкция по сдаче токенов:\n" + links["instructions"])
+                continue
+            print(cf_handle, solved)
+            print(cf_handle + " Solved " + str(solved) + " of tasks")
+            if solved == 0:
+                continue
+            token = ans_token.get_ans_token(solved, cf_handle)
+            print("Token: " + str(cf_handle) + " " + token)
+            bot.send_message(message_id, "Ваш токен за четверть #" + str(current_module) + ", в которой вы решили " + str(solved) + " задач:")
+            bot.send_message(message_id, str(cf_handle) + " " + token)
+            return
     else:
         bot.send_message(bot.chat.id, "У вас недостаточно прав для данной команды")
 
+
+    
+@bot.message_handler(content_types=["text"])
+def handle_text(message):
+    bot.send_message(message.chat.id, "К сожалению, я понимаю только команду /start")
 
 # @bot.message_handler(commands=["print_memes"])
 # def get_token(message):
@@ -250,5 +289,6 @@ while True:
         cached_users = set(get_file("data/registered_users").split(' '))
         bot.polling(non_stop=True)
     except Exception as e:
-        print("Fail: " + str(e))
+        print("Global fail: " + str(e))
         continue
+    break

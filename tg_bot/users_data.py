@@ -25,7 +25,7 @@ class Users_data():
         tg = self.get_tg_handles()
 
         row = tg.index(tg_handle)
-        return cf[row]
+        return str(cf[row])
 
 
     def is_user_registered(self,tg_handle):
